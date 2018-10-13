@@ -72,12 +72,14 @@
 /* IPC context - shared with platform IPC driver */
 struct ipc *_ipc;
 
-static inline struct sof_ipc_hdr *mailbox_validate(void)
+static uint32_t reply_offset;
+
+static inline struct sof_ipc_hdr *mailbox_validate(uint32_t offset)
 {
 	struct sof_ipc_hdr *hdr = _ipc->comp_data;
 
 	/* read component values from the inbox */
-	mailbox_hostbox_read(hdr, 0, sizeof(*hdr));
+	mailbox_hostbox_read(hdr, offset, sizeof(*hdr));
 
 	/* validate component header */
 	if (hdr->size > SOF_IPC_MSG_MAX_SIZE) {
@@ -86,7 +88,8 @@ static inline struct sof_ipc_hdr *mailbox_validate(void)
 	}
 
 	/* read rest of component data */
-	mailbox_hostbox_read(hdr + 1, sizeof(*hdr), hdr->size - sizeof(*hdr));
+	mailbox_hostbox_read(hdr + 1, offset + sizeof(*hdr),
+			     hdr->size - sizeof(*hdr));
 
 	dcache_writeback_region(hdr, hdr->size);
 
@@ -270,7 +273,8 @@ pipe_params:
 	reply.rhdr.error = 0;
 	reply.comp_id = pcm_params->comp_id;
 	reply.posn_offset = posn_offset;
-	mailbox_hostbox_write(0, &reply, sizeof(reply));
+	mailbox_hostbox_write(reply_offset, &reply, sizeof(reply));
+	reply_offset += sizeof(reply);
 	return 1;
 
 error:
@@ -523,7 +527,8 @@ static int ipc_pm_context_size(uint32_t header)
 	/* TODO: calculate the context and size of host buffers required */
 
 	/* write the context to the host driver */
-	mailbox_hostbox_write(0, &pm_ctx, sizeof(pm_ctx));
+	mailbox_hostbox_write(reply_offset, &pm_ctx, sizeof(pm_ctx));
+	reply_offset += sizeof(pm_ctx);
 	return 1;
 }
 
@@ -557,7 +562,8 @@ static int ipc_pm_context_save(uint32_t header)
 	//reply.entries_no = 0;
 
 	/* write the context to the host driver */
-	mailbox_hostbox_write(0, pm_ctx, sizeof(*pm_ctx));
+	mailbox_hostbox_write(reply_offset, pm_ctx, sizeof(*pm_ctx));
+	reply_offset += sizeof(*pm_ctx);
 
 	iipc->pm_prepare_D3 = 1;
 
@@ -571,7 +577,8 @@ static int ipc_pm_context_restore(uint32_t header)
 	trace_ipc("PMr");
 
 	/* restore context placeholder */
-	mailbox_hostbox_write(0, pm_ctx, sizeof(*pm_ctx));
+	mailbox_hostbox_write(reply_offset, pm_ctx, sizeof(*pm_ctx));
+	reply_offset += sizeof(*pm_ctx);
 
 	return 1;
 }
@@ -775,7 +782,8 @@ static int ipc_comp_value(uint32_t header, uint32_t cmd)
 	}
 
 	/* write component values to the outbox */
-	mailbox_hostbox_write(0, data, data->rhdr.hdr.size);
+	mailbox_hostbox_write(reply_offset, data, data->rhdr.hdr.size);
+	reply_offset += data->rhdr.hdr.size;
 	return 1;
 }
 
@@ -819,7 +827,8 @@ static int ipc_glb_tplg_comp_new(uint32_t header)
 	reply.rhdr.hdr.cmd = header;
 	reply.rhdr.error = 0;
 	reply.offset = 0; /* TODO: set this up for mmaped components */
-	mailbox_hostbox_write(0, &reply, sizeof(reply));
+	mailbox_hostbox_write(reply_offset, &reply, sizeof(reply));
+	reply_offset += sizeof(reply);
 	return 1;
 }
 
@@ -842,7 +851,8 @@ static int ipc_glb_tplg_buffer_new(uint32_t header)
 	reply.rhdr.hdr.cmd = header;
 	reply.rhdr.error = 0;
 	reply.offset = 0; /* TODO: set this up for mmaped components */
-	mailbox_hostbox_write(0, &reply, sizeof(reply));
+	mailbox_hostbox_write(reply_offset, &reply, sizeof(reply));
+	reply_offset += sizeof(reply);
 	return 1;
 }
 
@@ -871,7 +881,8 @@ static int ipc_glb_tplg_pipe_new(uint32_t header)
 	reply.rhdr.hdr.cmd = header;
 	reply.rhdr.error = 0;
 	reply.offset = 0; /* TODO: set this up for mmaped components */
-	mailbox_hostbox_write(0, &reply, sizeof(reply));
+	mailbox_hostbox_write(reply_offset, &reply, sizeof(reply));
+	reply_offset += sizeof(reply);
 	return 1;
 }
 
@@ -952,28 +963,15 @@ static int ipc_glb_tplg_message(uint32_t header)
 	}
 }
 
-/*
- * Global IPC Operations.
- */
-
-int ipc_cmd(void)
+static int do_ipc_cmd(struct sof_ipc_hdr *hdr)
 {
-	struct sof_ipc_hdr *hdr;
 	uint32_t type;
-
-	hdr = mailbox_validate();
-	if (hdr == NULL) {
-		trace_ipc_error("hdr");
-		return -EINVAL;
-	}
 
 	type = (hdr->cmd & SOF_GLB_TYPE_MASK) >> SOF_GLB_TYPE_SHIFT;
 
 	switch (type) {
 	case iGS(SOF_IPC_GLB_REPLY):
 		return 0;
-	case iGS(SOF_IPC_GLB_COMPOUND):
-		return -EINVAL;	/* TODO */
 	case iGS(SOF_IPC_GLB_TPLG_MSG):
 		return ipc_glb_tplg_message(hdr->cmd);
 	case iGS(SOF_IPC_GLB_PM_MSG):
@@ -991,6 +989,77 @@ int ipc_cmd(void)
 		trace_error_value(type);
 		return -EINVAL;
 	}
+}
+
+static int ipc_glb_decompound_message(uint32_t header)
+{
+	struct sof_ipc_hdr *hdr;
+	struct sof_ipc_compound_hdr *chdr;
+	struct sof_ipc_reply reply;
+	uint32_t offset = 0;
+	uint32_t ret = 0;
+	uint32_t count = header & 0xffff;
+
+	chdr = _ipc->comp_data;
+
+	if (count != chdr->count)
+		trace_ipc_error("CCE");
+
+	offset += sizeof(*chdr);
+
+	reply_offset = sizeof(reply);
+	do {
+		hdr = mailbox_validate(offset);
+
+		if (!hdr) {
+			trace_ipc_error("hdr");
+			return -EINVAL;
+		}
+		count--;
+		offset += hdr->size;
+		ret = do_ipc_cmd(hdr);
+		if (ret == 0) {
+			/* send standard reply */
+			reply.hdr.cmd = SOF_IPC_GLB_REPLY;
+			reply.error = 0;
+			reply.hdr.size = sizeof(reply);
+			mailbox_hostbox_write(reply_offset, &reply,
+					      sizeof(reply));
+			reply_offset += sizeof(reply);
+		}
+		trace_error_value(reply_offset);
+
+	} while (ret >= 0 && count > 0);
+
+	reply.hdr.cmd = header;
+	reply.hdr.size = reply_offset;
+	reply.error = 0;
+	mailbox_hostbox_write(0, &reply, sizeof(reply));
+
+	return ret;
+}
+
+/*
+ * Global IPC Operations.
+ */
+
+int ipc_cmd(void)
+{
+	struct sof_ipc_hdr *hdr;
+	uint32_t type;
+
+	hdr = mailbox_validate(0);
+	if (hdr == NULL) {
+		trace_ipc_error("hdr");
+		return -EINVAL;
+	}
+
+	reply_offset = 0;
+	type = (hdr->cmd & SOF_GLB_TYPE_MASK) >> SOF_GLB_TYPE_SHIFT;
+	if (type == iGS(SOF_IPC_GLB_COMPOUND))
+		return ipc_glb_decompound_message(hdr->cmd);
+
+	return do_ipc_cmd(hdr);
 }
 
 /* locks held by caller */
