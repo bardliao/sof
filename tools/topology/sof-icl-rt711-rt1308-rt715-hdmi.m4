@@ -6,6 +6,7 @@
 include(`utils.m4')
 include(`dai.m4')
 include(`pipeline.m4')
+include(`multidai.m4')
 
 # Include TLV library
 include(`common/tlv.m4')
@@ -168,7 +169,7 @@ dnl PCM_PLAYBACK_ADD(name, pcm_id, playback)
 PCM_PLAYBACK_ADD(Headphone, 0, PIPELINE_PCM_1)
 PCM_CAPTURE_ADD(Headset mic, 1, PIPELINE_PCM_2)
 PCM_PLAYBACK_ADD(SDW1-speakers, 2, PIPELINE_PCM_3)
-ifdef(`MONO', `', `PCM_PLAYBACK_ADD(SDW2-speakers, 3, PIPELINE_PCM_4)')
+#ifdef(`MONO', `', `PCM_PLAYBACK_ADD(SDW2-speakers, 3, PIPELINE_PCM_4)')
 PCM_CAPTURE_ADD(Microphones, 4, PIPELINE_PCM_5)
 PCM_PLAYBACK_ADD(HDMI1, 5, PIPELINE_PCM_6)
 PCM_PLAYBACK_ADD(HDMI2, 6, PIPELINE_PCM_7)
@@ -186,10 +187,12 @@ DAI_CONFIG(ALH, 2, 0, SDW0-Playback)
 DAI_CONFIG(ALH, 3, 1, SDW0-Capture)
 
 #ALH SDW1 Pin2 (ID: 2)
-DAI_CONFIG(ALH, 0x102, 2, SDW1-Playback)
+#DAI_CONFIG(ALH, 0x102, 2, SDW1-Playback)
+DAI_CONFIG(MULTI, 1, 2, SDW1-Playback,
+	   MULTI_DAI_CONFIG(MULTI_DAI_DATA(MULTI, 1, ALH, 0x102, 0x202, 0, 0)))
 
 #ALH SDW2 Pin2 (ID: 3)
-ifdef(`MONO', `', `DAI_CONFIG(ALH, 0x202, 3, SDW2-Playback)')
+#ifdef(`MONO', `', `DAI_CONFIG(ALH, 0x202, 3, SDW2-Playback)')
 
 #ALH SDW3 Pin2 (ID: 4)
 DAI_CONFIG(ALH, 0x302, 4, SDW3-Capture)
