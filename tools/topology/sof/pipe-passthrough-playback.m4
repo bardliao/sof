@@ -17,7 +17,7 @@ include(`pipeline.m4')
 
 # Host "Passthrough Playback" PCM
 # with 2 sink and 0 source periods
-W_PCM_PLAYBACK(PCM_ID, Passthrough Playback, DAI_PERIODS, 0)
+#W_PCM_PLAYBACK(PCM_ID, Passthrough Playback, DAI_PERIODS, 0)
 
 # Playback Buffers
 W_BUFFER(0, COMP_BUFFER_SIZE(DAI_PERIODS,
@@ -31,7 +31,7 @@ W_BUFFER(0, COMP_BUFFER_SIZE(DAI_PERIODS,
 
 P_GRAPH(pipe-pass-playback-PIPELINE_ID, PIPELINE_ID,
 	LIST(`		',
-	`dapm(N_BUFFER(0), N_PCMP(PCM_ID))'))
+	`dapm(N_BUFFER(0), MUXDEMUX3.0)'))
 
 #
 # Pipeline Source and Sinks
