@@ -51,6 +51,9 @@ PIPELINE_PCM_ADD(sof/pipe-volume-capture.m4,
 	1000, 0, 0,
 	48000, 48000, 48000)
 
+define(`DEMUX_PIPE1', `0x03')
+define(`DEMUX_PIPE2', `0x04')
+
 # Low Latency playback pipeline 3 on PCM 2 using max 2 channels of s32le.
 # Schedule 48 frames per 1000us deadline on core 0 with priority 0
 PIPELINE_PCM_ADD(sof/pipe-volume-demux-playback.m4,
