@@ -109,7 +109,7 @@ dnl     deadline, priority, core, time_domain)
 # playback DAI is ALH(SDW0 PIN2) using 2 periods
 # Buffers use s24le format, with 48 frame per 1000us on core 0 with priority 0
 DAI_ADD(sof/pipe-dai-playback.m4,
-	1, ALH, 2, SDW0-Playback,
+	1, ALH, 0x202, SDW0-Playback,
 	PIPELINE_SOURCE_1, 2, s24le,
 	1000, 0, 0, SCHEDULE_TIME_DOMAIN_TIMER)
 
@@ -131,7 +131,7 @@ ifdef(`MONO', `',
 `# playback DAI is ALH(SDW2 PIN2) using 2 periods
 # Buffers use s24le format, with 48 frame per 1000us on core 0 with priority 0
 DAI_ADD_SCHED(sof/pipe-dai-sched-playback.m4,
-	4, ALH, 0x202, SDW1-Playback,
+	4, ALH, 0x2, SDW1-Playback,
 	PIPELINE_SOURCE_4, 2, s24le,
 	1000, 0, 0, SCHEDULE_TIME_DOMAIN_TIMER,
 	PIPELINE_PLAYBACK_SCHED_COMP_3)
@@ -149,10 +149,10 @@ SectionGraph."PIPE_DEMUX" {
 
 # capture DAI is ALH(SDW3 PIN2) using 2 periods
 # Buffers use s24le format, with 48 frame per 1000us on core 0 with priority 0
-DAI_ADD(sof/pipe-dai-capture.m4,
-	5, ALH, 0x302, SDW3-Capture,
-	PIPELINE_SINK_5, 2, s24le,
-	1000, 0, 0, SCHEDULE_TIME_DOMAIN_TIMER)
+#DAI_ADD(sof/pipe-dai-capture.m4,
+#	5, ALH, 0x302, SDW3-Capture,
+#	PIPELINE_SINK_5, 2, s24le,
+#	1000, 0, 0, SCHEDULE_TIME_DOMAIN_TIMER)
 
 # playback DAI is iDisp1 using 2 periods
 # # Buffers use s32le format, 1000us deadline on core 0 with priority 0
@@ -180,7 +180,7 @@ dnl PCM_PLAYBACK_ADD(name, pcm_id, playback)
 PCM_PLAYBACK_ADD(Headphone, 0, PIPELINE_PCM_1)
 PCM_CAPTURE_ADD(Headset mic, 1, PIPELINE_PCM_2)
 PCM_PLAYBACK_ADD(SDW1-speakers, 2, PIPELINE_PCM_3)
-PCM_CAPTURE_ADD(Microphones, 4, PIPELINE_PCM_5)
+#PCM_CAPTURE_ADD(Microphones, 4, PIPELINE_PCM_5)
 PCM_PLAYBACK_ADD(HDMI1, 5, PIPELINE_PCM_6)
 PCM_PLAYBACK_ADD(HDMI2, 6, PIPELINE_PCM_7)
 PCM_PLAYBACK_ADD(HDMI3, 7, PIPELINE_PCM_8)
@@ -191,20 +191,20 @@ PCM_PLAYBACK_ADD(HDMI3, 7, PIPELINE_PCM_8)
 
 #ALH dai index = ((link_id << 8) | PDI id)
 #ALH SDW0 Pin2 (ID: 0)
-DAI_CONFIG(ALH, 2, 0, SDW0-Playback)
+DAI_CONFIG(ALH, 0x202, 2, SDW0-Playback)
 
 #ALH SDW0 Pin3 (ID: 1)
-DAI_CONFIG(ALH, 3, 1, SDW0-Capture)
+DAI_CONFIG(ALH, 3, 3, SDW0-Capture)
 
 #ALH SDW1 Pin2 (ID: 2)
-DAI_CONFIG(ALH, 0x102, 2, SDW1-Playback)
+DAI_CONFIG(ALH, 0x102, 0, SDW1-Playback)
 
 #ALH SDW3 Pin2 (ID: 4)
-DAI_CONFIG(ALH, 0x302, 4, SDW3-Capture)
+#DAI_CONFIG(ALH, 0x302, 4, SDW3-Capture)
 
 # 3 HDMI/DP outputs (ID: 5,6,7)
-DAI_CONFIG(HDA, 0, 5, iDisp1)
-DAI_CONFIG(HDA, 1, 6, iDisp2)
-DAI_CONFIG(HDA, 2, 7, iDisp3)
+DAI_CONFIG(HDA, 0, 4, iDisp1)
+DAI_CONFIG(HDA, 1, 5, iDisp2)
+DAI_CONFIG(HDA, 2, 6, iDisp3)
 
 DEBUG_END
