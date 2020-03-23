@@ -53,7 +53,8 @@ PIPELINE_PCM_ADD(sof/pipe-volume-capture.m4,
 
 # Low Latency playback pipeline 3 on PCM 2 using max 2 channels of s32le.
 # Schedule 48 frames per 1000us deadline on core 0 with priority 0
-PIPELINE_PCM_ADD(sof/pipe-volume-demux-playback.m4,
+PIPELINE_PCM_ADD(ifdef(`MONO',`sof/pipe-volume-playback.m4,',
+`sof/pipe-volume-demux-playback.m4,')
 	3, 2, 2, s32le,
 	1000, 0, 0,
 	48000, 48000, 48000)
