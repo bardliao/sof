@@ -10,4 +10,5 @@ define(`SSP_NAME', `SSP0-Codec')
 undefine(`SSP_MCLK_RATE')
 define(`SSP_MCLK_RATE', `24000000')
 
+define(`NO_AGGREGATION', `')
 include(`platform/intel/dmic.m4')
