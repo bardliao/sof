@@ -11,6 +11,7 @@ add_custom_target(abi2
 # Array of "input-file-name;output-file-name;"
 set(TPLGS
 	"sof-cnl-nocodec\;sof-cnl-nocodec\;"
+	"cavs-nocodec\;cavs-nocodec\;"
 )
 
 add_custom_target(topology2 ALL)
