@@ -12,6 +12,8 @@ add_custom_target(abi2
 set(TPLGS
 	"sof-cnl-nocodec\;sof-cnl-nocodec\;"
 	"cavs-nocodec\;cavs-nocodec\;"
+	"cavs-hda\;cavs-hda\;"
+	"cavs-dmic\;cavs-dmic\;"
 )
 
 add_custom_target(topology2 ALL)
