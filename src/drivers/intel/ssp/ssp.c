@@ -613,35 +613,36 @@ out:
 	return ret;
 }
 
-/*
- * Portion of the SSP configuration should be applied just before the
- * SSP dai is activated, for either power saving or params runtime
- * configurable flexibility.
- */
-static int ssp_pre_start(struct dai *dai)
+static int ssp_set_mclk(struct dai *dai)
+{
+	struct ssp_pdata *ssp = dai_get_drvdata(dai);
+	struct sof_ipc_dai_config *config = &ssp->config;
+	int ret;
+
+	/* MCLK config */
+	ret = mn_set_mclk(config->ssp.mclk_id, config->ssp.mclk_rate);
+	if (ret < 0)
+		dai_err(dai, "invalid mclk_rate = %d for mclk_id = %d",
+			config->ssp.mclk_rate, config->ssp.mclk_id);
+
+	return ret;
+}
+
+static void ssp_release_mclk(struct dai *dai)
+{
+	struct ssp_pdata *ssp = dai_get_drvdata(dai);
+
+	return mn_release_mclk(ssp->config.ssp.mclk_id);
+}
+
+static int ssp_set_bclk(struct dai *dai)
 {
 	struct ssp_pdata *ssp = dai_get_drvdata(dai);
 	struct sof_ipc_dai_config *config = &ssp->config;
 	uint32_t sscr0;
 	uint32_t mdiv;
 	bool need_ecs = false;
-
 	int ret = 0;
-
-	dai_info(dai, "ssp_pre_start()");
-
-	/* SSP active means bclk already configured. */
-	if (ssp->state[SOF_IPC_STREAM_PLAYBACK] == COMP_STATE_ACTIVE ||
-	    ssp->state[SOF_IPC_STREAM_CAPTURE] == COMP_STATE_ACTIVE)
-		return 0;
-
-	/* MCLK config */
-	ret = mn_set_mclk(config->ssp.mclk_id, config->ssp.mclk_rate);
-	if (ret < 0) {
-		dai_err(dai, "invalid mclk_rate = %d for mclk_id = %d",
-			config->ssp.mclk_rate, config->ssp.mclk_id);
-		goto out;
-	}
 
 	sscr0 = ssp_read(dai, SSCR0);
 
@@ -690,6 +691,42 @@ out:
 	return ret;
 }
 
+static void ssp_release_bclk(struct dai *dai)
+{
+#if CONFIG_INTEL_MN
+	return mn_release_bclk(dai->index);
+#endif
+}
+
+/*
+ * Portion of the SSP configuration should be applied just before the
+ * SSP dai is activated, for either power saving or params runtime
+ * configurable flexibility.
+ */
+static int ssp_pre_start(struct dai *dai)
+{
+	struct ssp_pdata *ssp = dai_get_drvdata(dai);
+	int ret = 0;
+
+	dai_info(dai, "ssp_pre_start()");
+
+	/* SSP active means bclk already configured. */
+	if (ssp->state[SOF_IPC_STREAM_PLAYBACK] == COMP_STATE_ACTIVE ||
+	    ssp->state[SOF_IPC_STREAM_CAPTURE] == COMP_STATE_ACTIVE)
+		return 0;
+
+	/* MCLK config */
+	ret = ssp_set_mclk(dai);
+	if (ret < 0)
+		return ret;
+
+	ret = ssp_set_bclk(dai);
+	if (ret < 0)
+		return ret;
+
+	return ret;
+}
+
 /*
  * For power saving, we should do kinds of power release when the SSP
  * dai is changed to inactive, though the runtime param configuration
@@ -703,10 +740,8 @@ static void ssp_post_stop(struct dai *dai)
 	if (ssp->state[SOF_IPC_STREAM_PLAYBACK] != COMP_STATE_ACTIVE &&
 	    ssp->state[SOF_IPC_STREAM_CAPTURE] != COMP_STATE_ACTIVE) {
 		dai_info(dai, "releasing BCLK/MCLK clocks for SSP%d...", dai->index);
-#if CONFIG_INTEL_MN
-		mn_release_bclk(dai->index);
-#endif
-		mn_release_mclk(ssp->config.ssp.mclk_id);
+		ssp_release_bclk(dai);
+		ssp_release_mclk(dai);
 	}
 }
 
@@ -907,14 +942,10 @@ static int ssp_probe(struct dai *dai)
 
 static int ssp_remove(struct dai *dai)
 {
-	struct ssp_pdata *ssp = dai_get_drvdata(dai);
-
 	pm_runtime_put_sync(SSP_CLK, dai->index);
 
-	mn_release_mclk(ssp->config.ssp.mclk_id);
-#if CONFIG_INTEL_MN
-	mn_release_bclk(dai->index);
-#endif
+	ssp_release_mclk(dai);
+	ssp_release_bclk(dai);
 
 	/* Disable SSP power */
 	pm_runtime_put_sync(SSP_POW, dai->index);
