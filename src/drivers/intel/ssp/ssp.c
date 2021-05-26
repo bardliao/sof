@@ -160,6 +160,7 @@ static int ssp_set_config(struct dai *dai, struct ipc_config_dai *common_config,
 
 	int ret = 0;
 
+	dai_info(dai, "ssp_set_config() ssp->status %d %d", ssp->state[DAI_DIR_PLAYBACK], ssp->state[DAI_DIR_CAPTURE]);
 	spin_lock(&dai->lock);
 
 	/* is playback/capture already running */
@@ -803,7 +804,7 @@ static int ssp_hw_params(struct dai *dai,
 		return -EINVAL;
 	}
 
-	dai_info(dai, "ssp_hw_params() params.clks_control 0x%x", ssp->params.clks_control);
+	dai_info(dai, "ssp_hw_params() params.clks_control 0x%x ssp->status %d %d", ssp->params.clks_control, ssp->state[DAI_DIR_PLAYBACK], ssp->state[DAI_DIR_CAPTURE]);
 
 	spin_lock(&dai->lock);
 
@@ -837,6 +838,7 @@ static void ssp_hw_free(struct dai *dai)
 	struct ssp_pdata *ssp = dai_get_drvdata(dai);
 
 	dai_info(dai, "ssp_hw_free()");
+	dai_info(dai, "ssp_hw_free() ssp->status %d %d", ssp->state[DAI_DIR_PLAYBACK], ssp->state[DAI_DIR_CAPTURE]);
 
 	spin_lock(&dai->lock);
 
@@ -864,6 +866,7 @@ static void ssp_start(struct dai *dai, int direction)
 {
 	struct ssp_pdata *ssp = dai_get_drvdata(dai);
 
+	dai_info(dai, "ssp_start() ssp->status %d %d", ssp->state[DAI_DIR_PLAYBACK], ssp->state[DAI_DIR_CAPTURE]);
 	spin_lock(&dai->lock);
 
 	/* request mclk/bclk */
@@ -907,6 +910,7 @@ static void ssp_stop(struct dai *dai, int direction)
 {
 	struct ssp_pdata *ssp = dai_get_drvdata(dai);
 
+	dai_info(dai, "ssp_stop() ssp->status %d %d", ssp->state[DAI_DIR_PLAYBACK], ssp->state[DAI_DIR_CAPTURE]);
 	spin_lock(&dai->lock);
 
 	/* wait to get valid fifo status */
@@ -964,6 +968,7 @@ static int ssp_trigger(struct dai *dai, int cmd, int direction)
 	struct ssp_pdata *ssp = dai_get_drvdata(dai);
 
 	dai_info(dai, "ssp_trigger() cmd %d", cmd);
+	dai_info(dai, "ssp_trigger() ssp->status %d %d", ssp->state[DAI_DIR_PLAYBACK], ssp->state[DAI_DIR_CAPTURE]);
 
 	switch (cmd) {
 	case COMP_TRIGGER_START:
