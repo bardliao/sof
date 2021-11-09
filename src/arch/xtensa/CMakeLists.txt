@@ -126,7 +126,7 @@ separate_arguments(EXTRA_CFLAGS_AS_LIST  NATIVE_COMMAND  ${EXTRA_CFLAGS})
 target_compile_options(sof_options INTERFACE
 	$<$<COMPILE_LANGUAGE:C>:
 		-${optimization_flag} -g
-		-Wall -Werror
+		-Wall
 		-Wl,-EL
 		-Wmissing-prototypes
 		-Wpointer-arith
