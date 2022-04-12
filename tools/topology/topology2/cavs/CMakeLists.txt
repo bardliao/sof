@@ -25,6 +25,9 @@ PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt.bin"
 
 # CAVS SDW topology with passthrough pipelines
 "cavs-sdw\;cavs-sdw"
+# CAVS SDW + DMIC topology with passthrough pipelines
+"cavs-sdw\;cavs-mtl-sdw-dmic\;NUM_DMICS=1,\
+PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-cavs-mtl-nocodec.bin"
 # CAVS SSP topology for TGL
 "cavs-nocodec\;cavs-tgl-nocodec\;NUM_DMICS=2,\
 PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-cavs-tgl-nocodec.bin"
