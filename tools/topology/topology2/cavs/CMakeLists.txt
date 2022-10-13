@@ -28,6 +28,15 @@ HDA_CONFIG=mix,NUM_DMICS=4,PDM1_MIC_A_ENABLE=1,PDM1_MIC_B_ENABLE=1,PREPROCESS_PL
 # CAVS SDW topology with passthrough pipelines
 "cavs-sdw\;cavs-sdw"
 
+"cavs-sdw\;sof-tgl-rt711-rt1316-rt714\;NUM_SDW_AMPS=2,SDW_DMIC=1"
+
+"cavs-sdw\;sof-tgl-rt715-rt711-rt1308-mono\;NUM_SDW_AMPS=1,SDW_DMIC=1,\
+SDW_JACK_OUT_STREAM=SDW1-Playback,SDW_JACK_IN_STREAM=SDW1-Capture,\
+SDW_SPK_STREAM=SDW2-Playback,SDW_DMIC_STREAM=SDW0-Capture"
+
+"cavs-sdw\;sof-tgl-rt711-rt1308-4ch\;NUM_SDW_AMPS=1,NUM_DMICS=4,DMIC0_ID=3,\
+DMIC1_ID=4,PDM1_MIC_A_ENABLE=1,PDM1_MIC_B_ENABLE=1"
+
 # CAVS SDW with SRC gain and mixer support
 "cavs-sdw-src-gain-mixin\;cavs-sdw-src-gain-mixin"
 
