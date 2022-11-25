@@ -494,6 +494,7 @@ static int ipc4_process_glb_message(struct ipc4_message_request *ipc4)
 
 	type = ipc4->primary.r.type;
 
+	tr_err(&ipc_info, "ylb, ipc message type %d", type);
 	switch (type) {
 	case SOF_IPC4_GLB_BOOT_CONFIG:
 	case SOF_IPC4_GLB_ROM_CONTROL:
@@ -517,6 +518,7 @@ static int ipc4_process_glb_message(struct ipc4_message_request *ipc4)
 		ret = ipc4_delete_pipeline(ipc4);
 		break;
 	case SOF_IPC4_GLB_SET_PIPELINE_STATE:
+		tr_info(&ipc_tr, "ylb, set ppl state");
 		ret = ipc4_set_pipeline_state(ipc4);
 		break;
 
@@ -866,6 +868,7 @@ static int ipc4_process_module_message(struct ipc4_message_request *ipc4)
 
 	type = ipc4->primary.r.type;
 
+	tr_info(&ipc_tr, "ylb: ipc_process_module_message, type: %d", type);
 	switch (type) {
 	case SOF_IPC4_MOD_INIT_INSTANCE:
 		ret = ipc4_init_module_instance(ipc4);
@@ -1022,6 +1025,8 @@ void ipc_cmd(struct ipc_cmd_hdr *_hdr)
 
 	target = in->primary.r.msg_tgt;
 
+	k_msleep(20);
+	tr_info(&ipc_tr, "ylb: ipc_cmd target: %d", target);
 	switch (target) {
 	case SOF_IPC4_MESSAGE_TARGET_FW_GEN_MSG:
 		err = ipc4_process_glb_message(in);

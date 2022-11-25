@@ -422,6 +422,8 @@ int pipeline_trigger_run(struct pipeline *p, struct comp_dev *host, int cmd)
 			return pipeline_is_timer_driven(p);
 	}
 
+	k_msleep(20);
+	pipe_err(p, "ylb %d, pipeline_trigger_run()", __LINE__);
 	ret = walk_ctx.comp_func(host, NULL, &walk_ctx, host->direction);
 	if (ret < 0) {
 		pipe_err(p, "pipeline_trigger_run(): ret = %d, host->comp.id = %u, cmd = %d",
@@ -451,6 +453,8 @@ int pipeline_trigger_run(struct pipeline *p, struct comp_dev *host, int cmd)
 		if (data.delay_ms)
 			k_msleep(data.delay_ms);
 
+		k_msleep(20);
+		pipe_err(p, "ylb %d, pipeline_trigger_run()", __LINE__);
 		ret = walk_ctx.comp_func(host, NULL, &walk_ctx, host->direction);
 		if (ret < 0)
 			pipe_err(p, "pipeline_trigger_run(): ret = %d, host->comp.id = %u, cmd = %d",
