@@ -826,6 +826,8 @@ static int selector_process(struct processing_module *mod,
 	uint32_t avail_frames = input_buffers[0].size;
 
 	comp_dbg(mod->dev, "selector_process()");
+	k_msleep(20);
+	comp_err(mod->dev, "selector_process()");
 
 	if (!avail_frames)
 		return PPL_STATUS_PATH_STOP;
