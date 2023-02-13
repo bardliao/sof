@@ -18,6 +18,11 @@ PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-sof-hda-generic-4ch.bin,USE_CHAIN_DMA=true
 "cavs-sdw\;cavs-sdw\;DEEPBUFFER_FW_DMA_MS=100,\
 PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-cavs-sdw.bin"
 
+"cavs-sdw\;sof-tgl-rt1316\;SDW_JACK_OUT_STREAM=SDW0-Playback,\
+SDW_JACK_IN_STREAM=SDW0-Capture,SDW_JACK_OUT_BE_ID=2,SDW_JACK_IN_BE_ID=3,\
+HDMI1_ID=4,HDMI2_ID=5,HDMI3_ID=6"
+
+
 # IPC4 topology for TGL rt711 Headset + rt1316 Amplifier + rt714 DMIC
 "cavs-sdw\;sof-tgl-rt711-rt1316-rt714\;NUM_SDW_AMPS=2,SDW_DMIC=1,\
 PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-sof-tgl-rt711-rt1316-rt714.bin"
