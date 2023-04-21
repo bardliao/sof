@@ -39,6 +39,11 @@ PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-sof-tgl-rt711-rt1308-4ch.bin"
 DMIC1_ID=3,PDM1_MIC_A_ENABLE=1,PDM1_MIC_B_ENABLE=1,HDMI1_ID=4,HDMI2_ID=5,\
 HDMI3_ID=6,PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-sof-adl-rt711-4ch.bin"
 
+"cavs-sdw\;sof-adl-sdw-max98373-rt5682\;NUM_SDW_AMPS=1,SDW_DMIC=0,\
+SDW_JACK_OUT_STREAM=SDW0-Playback,SDW_JACK_IN_STREAM=SDW0-Capture,\
+SDW_SPK_STREAM=SDW2-Playback,SDW_SPK_IN_STREAM=SDW2-Capture,\
+HDMI1_ID=6,HDMI2_ID=7,HDMI3_ID=8,HDMI4_ID=9"
+
 # BT offload
 "cavs-nocodec-bt\;sof-nocodec-bt\;PREPROCESS_PLUGINS=nhlt,NHLT_BIN=nhlt-sof-nocodec-bt.bin,\
 PLATFORM=tgl"
