@@ -29,6 +29,11 @@ HDMI1_ID=6,HDMI2_ID=7,HDMI3_ID=8"
 SDW_AMP_FEEDBACK=false,SDW_SPK_STREAM=Playback-SmartAmp,SDW_DMIC_STREAM=Capture-SmartMic,\
 SDW_JACK_OUT_STREAM=Playback-SimpleJack,SDW_JACK_IN_STREAM=Capture-SimpleJack"
 
+"cavs-sdw\;sof-mtl-rt712-l2-rt1320-l1\;PLATFORM=mtl,NUM_SDW_AMP_LINKS=2,\
+SDW_AMP_FEEDBACK=false,SDW_SPK_STREAM=Playback-SmartAmp,\
+SDW_JACK_OUT_STREAM=Playback-SimpleJack,SDW_JACK_IN_STREAM=Capture-SimpleJack,\
+HDMI1_ID=3,HDMI2_ID=4,HDMI3_ID=5"
+
 "cavs-sdw\;sof-mtl-rt712-l0\;PLATFORM=mtl,NUM_SDW_AMP_LINKS=1,\
 SDW_AMP_FEEDBACK=false,SDW_SPK_STREAM=Playback-SmartAmp,\
 SDW_JACK_OUT_STREAM=Playback-SimpleJack,SDW_JACK_IN_STREAM=Capture-SimpleJack,\
