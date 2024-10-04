@@ -150,6 +150,7 @@ set(TPLGS
 	"sof-tgl-rt711-rt1308\;sof-adl-rt711-l0-rt1316-l2-4ch\;-DCHANNELS=4\;-DEXT_AMP\;-DEXT_AMP_REF\;-DAMP_1_LINK=2\;-DDMICPROC_FILTER1=eq_iir_coef_highpass_40hz_20db_48khz.m4\;-DDMIC16KPROC_FILTER1=eq_iir_coef_highpass_40hz_20db_16khz.m4\;-DPLATFORM=adl"
 	"sof-tgl-rt711-rt1308\;sof-rpl-rt711-4ch\;-DCHANNELS=4\;-DDMICPROC_FILTER1=eq_iir_coef_highpass_40hz_20db_48khz.m4\;-DDMIC16KPROC_FILTER1=eq_iir_coef_highpass_40hz_20db_16khz.m4\;-DPLATFORM=rpl\;-DDYNAMIC=1"
 	"sof-tgl-rt711-rt1308\;sof-rpl-rt711\;-DCHANNELS=0\;-DPLATFORM=rpl\;-DDYNAMIC=1"
+	"sof-tgl-sdca-mf\;sof-rpl-cs42l43-l0\;-DCHANNELS=0\;-DPLATFORM=rpl\;-DDYNAMIC=1"
 	## end SoundWire topologies
 
 	## SoundWire NOJACK topologies
