@@ -132,6 +132,7 @@ set(TPLGS
 	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-adl-rt711-l0-rt1316-l13-rt714-l2\;-DPLATFORM=adl\;-DUAJ_LINK=0\;-DAMP_1_LINK=1\;-DAMP_2_LINK=3\;-DEXT_AMP_REF\;-DMIC_LINK=2"
 	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-adl-rt711-l2-rt1316-l01-rt714-l3\;-DPLATFORM=adl\;-DUAJ_LINK=2\;-DAMP_1_LINK=0\;-DAMP_2_LINK=1\;-DEXT_AMP_REF\;-DMIC_LINK=3"
 	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-adl-rt711-l2-rt1316-l01\;-DPLATFORM=adl\;-DUAJ_LINK=2\;-DAMP_1_LINK=0\;-DAMP_2_LINK=1\;-DEXT_AMP_REF\;-DNO_LOCAL_MIC"
+	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-adl-rt1316-l02\;-DPLATFORM=adl\;-DAMP_1_LINK=0\;-DAMP_2_LINK=2\;-DNO_LOCAL_MIC\;-DNO_JACK"
 	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-rpl-rt711-l2\;-DPLATFORM=rpl\;-DUAJ_LINK=2\;-DNOAMP\;-DNO_LOCAL_MIC\;-DDYNAMIC=1"
 	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-rpl-rt711-l0\;-DPLATFORM=rpl\;-DUAJ_LINK=0\;-DNOAMP\;-DNO_LOCAL_MIC\;-DDYNAMIC=1"
 	"sof-icl-rt711-rt1308-rt715-hdmi\;sof-rpl-rt711-l2-rt1316-l01-rt714-l3\;-DPLATFORM=rpl\;-DUAJ_LINK=2\;-DAMP_1_LINK=0\;-DAMP_2_LINK=1\;-DEXT_AMP_REF\;-DMIC_LINK=3\;-DDYNAMIC=1"
