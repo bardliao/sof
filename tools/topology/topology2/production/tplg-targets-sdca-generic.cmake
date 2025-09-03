@@ -41,4 +41,10 @@ SDW_AMP_NUM_CHANNELS=4,SDW_AMP_XOVER=true,\
 SDW_AMP_XOVER_SELECTOR_PARAMS=xover_selector_lr_to_lrlr,\
 SDW_AMP_XOVER_EQIIR_PARAMS=xover_lr4_2000hz_llhh_48khz"
 
+"cavs-sdw\;sof-sdca-2amp-feedback-id3-xover\;NUM_SDW_AMP_LINKS=2,\
+SDW_JACK=false,SDW_AMP_FEEDBACK=true,SDW_SPK_STREAM=Playback-SmartAmp,\
+SDW_SPK_IN_STREAM=Capture-SmartAmp,NUM_HDMIS=0,\
+SDW_AMP_NUM_CHANNELS=4,SDW_AMP_XOVER=true,\
+SDW_AMP_XOVER_SELECTOR_PARAMS=xover_selector_lr_to_lrlr,\
+SDW_AMP_XOVER_EQIIR_PARAMS=xover_lr4_2000hz_llhh_48khz"
 )
