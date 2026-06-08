@@ -249,6 +249,14 @@ PDM1_MIC_A_ENABLE=0,PDM1_MIC_B_ENABLE=0,DMIC0_ID=5,DMIC1_ID=6,PREPROCESS_PLUGINS
 NHLT_BIN=nhlt-sof-ptl-dmic-2ch-id5.bin,DMIC0_ENHANCED_CAPTURE=true,\
 EFX_DMIC0_TDFB_PARAMS=line2_generic_pm10deg,EFX_DMIC0_DRC_PARAMS=dmic_default"
 
+"cavs-sdw\;sof-ptl-dmic-4ch-id1\;PLATFORM=ptl,SDW_JACK=false,NUM_HDMIS=0,NUM_DMICS=4,\
+PDM1_MIC_A_ENABLE=1,PDM1_MIC_B_ENABLE=1,DMIC0_ID=1,DMIC1_ID=2,PREPROCESS_PLUGINS=nhlt,\
+NHLT_BIN=nhlt-sof-ptl-dmic-4ch-id1.bin,DMIC0_ENHANCED_CAPTURE=false,\
+DMIC1_RATE=16000,DMIC1_PCM_ID=100,\
+DMIC0_HOST_PIPELINE_ID=13,DMIC0_DAI_PIPELINE_ID=14,DMIC0_HOST_PIPELINE_SINK='host-copier.99.capture',\
+DMIC0_DAI_PIPELINE_SRC='module-copier.14.2',DMIC0_DAI_COPIER='dai-copier.DMIC.dmic01.capture',\
+DMIC0_PCM_CAPS='Gain Capture 13',DMIC0_PCM_ID=99"
+
 "cavs-sdw\;sof-ptl-dmic-4ch-id2\;PLATFORM=ptl,SDW_JACK=false,NUM_HDMIS=0,NUM_DMICS=4,\
 PDM1_MIC_A_ENABLE=1,PDM1_MIC_B_ENABLE=1,DMIC0_ID=2,DMIC1_ID=3,PREPROCESS_PLUGINS=nhlt,\
 NHLT_BIN=nhlt-sof-ptl-dmic-4ch-id2.bin,DMIC0_ENHANCED_CAPTURE=true,\
@@ -315,6 +323,16 @@ NHLT_BIN=nhlt-sof-ptl-ssp1-jack-id0.bin,HEADSET_SSP_DAI_INDEX=1,\
 HEADSET_CODEC=true,HEADSET_CODEC_NAME=SSP1-Codec,NUM_HDMIS=0,\
 HDMI_IN_CAPTURE=false"
 
+"cavs-rt5682\;sof-ptl-ssp0-jack-id0\;PLATFORM=ptl,\
+INCLUDE_BT_OFFLOAD=false,INCLUDE_SPK=false,NUM_HDMIS=0,PREPROCESS_PLUGINS=nhlt,\
+NHLT_BIN=nhlt-sof-ptl-ssp0-jack-id0.bin,SPK_ID=6,DEEPBUFFER_FW_DMA_MS=10,\
+INCLUDE_DEEP_BUF_JACK=true,INCLUDE_ECHO_REF=false"
+
+"cavs-rt5682\;sof-ptl-ssp1-amp-id6\;PLATFORM=ptl,\
+INCLUDE_BT_OFFLOAD=false,INCLUDE_HEADSET=false,NUM_HDMIS=0,PREPROCESS_PLUGINS=nhlt,\
+NHLT_BIN=nhlt-sof-ptl-ssp1-amp-id6.bin,SPK_ID=6,DEEPBUFFER_FW_DMA_MS=10,\
+INCLUDE_DEEP_BUF_JACK=false,INCLUDE_ECHO_REF=true"
+
 # HDMI IN port: SSP0 and SSP2, SSP number is a mask in HDMI_IN_1_ID and HDMI_IN_2_ID
 # For example, SSP5 indicates SSP 0 and 2 are used for HDMI IN
 "cavs-es83x6\;sof-ptl-ssp5-hdmiin-id1\;PLATFORM=ptl,PREPROCESS_PLUGINS=nhlt,NUM_HDMIS=0,\
@@ -332,6 +350,11 @@ HDMI_IN_1_ID=6,HDMI_IN_2_ID=7"
 "cavs-es83x6\;sof-ptl-ssp2-bt-id2\;PLATFORM=ptl,INCLUDE_BT_OFFLOAD=true,NUM_HDMIS=0,\
 HEADSET_CODEC=false,HDMI_IN_CAPTURE=false,BT_ID=2,PREPROCESS_PLUGINS=nhlt,\
 NHLT_BIN=nhlt-sof-ptl-ssp2-bt-id2.bin"
+
+"cavs-es83x6\;sof-ptl-ssp2-bt-id7\;PLATFORM=ptl,INCLUDE_BT_OFFLOAD=true,NUM_HDMIS=0,\
+HEADSET_CODEC=false,HDMI_IN_CAPTURE=false,BT_ID=2,PREPROCESS_PLUGINS=nhlt,\
+BT_NAME=SSP2-BT,BT_ID=7,BT_PCM_NAME=Bluetooth,\
+NHLT_BIN=nhlt-sof-ptl-ssp2-bt-id7.bin"
 
 #BT_ID=8, 10 for sdw_sof machine
 "cavs-sdw\;sof-ptl-ssp2-bt-id8\;PLATFORM=ptl,ADD_BT=true,SDW_JACK=false,NUM_HDMIS=0,\
