@@ -29,7 +29,7 @@ DEEP_BUF_SPK=true"
 
 #default NUM_DMICS=2
 "cavs-sdw\;sof-sdca-mic-id4\;SDW_JACK=false,SDW_DMIC=1,NUM_HDMIS=0,\
-SDW_DMIC_STREAM=Capture-SmartMic"
+SDW_DMIC_STREAM=Capture-SmartMic,SDW_DMIC_PASSTHROUGH=true,SDW_DMIC_ENHANCED_CAPTURE=false,INCLUDE_KPB=true"
 
 "cavs-sdw\;sof-sdca-mic-4ch-id4\;SDW_JACK=false,SDW_DMIC=1,NUM_HDMIS=0,\
 SDW_DMIC_STREAM=Capture-SmartMic,SDW_DMIC_PCM_CHANNELS=4,TDFB_DMIC_PCM_CHANNELS=4,\
